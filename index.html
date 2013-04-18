@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title></title>
+	<meta name="description" content="">
+	<meta name="keywords" content="" />
+	<meta name="author" content="">
+
+</head>
+
+<body>
+
+	<h1 id="currentTemp"></h1>
+
+	<ul id="itemList"></ul>
+
+	<hr>
+
+	<ul id="itemList2"></ul>
+
+	<script src="forecast.io.js"></script>
+	<script>
+	var latitude = '52.4308';
+	var longitude = '13.2588';
+
+
+	var forecast = new ForecastIO();
+
+
+	/*
+	 * GET CURRENT CONDITIONS
+	 */
+	var condition = forecast.getCurrentConditions(latitude, longitude);
+
+	// echo temperature
+	document.getElementById("currentTemp").innerHTML = condition.getTemperature();
+
+	/*
+	 * GET HOURLY CONDITIONS FOR TODAY
+	 */
+	var conditions_today = forecast.getForecastToday(latitude, longitude);
+	var items = '';
+
+	for(i=0; i<conditions_today.length; i++) {
+		items += "<li>"  + conditions_today[i].getTime('HH:mm') + ': ' + conditions_today[i].getTemperature() + "</li>";
+	}
+
+	document.getElementById("itemList").innerHTML = items;
+
+	/*
+	 * GET DAILY CONDITIONS FOR NEXT 7 DAYS
+	 */
+
+	var conditions_week = forecast.getForecastWeek(latitude, longitude);
+	var items2 = '';
+
+	for(i=0; i<conditions_week.length; i++) {
+		items2 += "<li>"  + conditions_week[i].getTime('YYYY-MM-DD') + ': ' + conditions_week[i].getMaxTemperature() + "</li>";
+	}
+
+	document.getElementById("itemList2").innerHTML = items2;
+
+	</script>
+</body>
+</html>
