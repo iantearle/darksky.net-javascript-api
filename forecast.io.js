@@ -230,4 +230,28 @@ function ForecastIOConditions(raw_data) {
 	this.getSunset = function() {
 		return raw_data.sunsetTime;
 	}
+	/**
+	 * get precipitation intensity
+	 *
+	 * @return number
+	 */
+	this.getPrecipIntensity = function() {
+		return raw_data.precipIntensity;
+	}
+	/**
+	 * get dew point
+	 *
+	 * @return number
+	 */
+	this.getDewPoint = function() {
+		return raw_data.dewPoint;
+	}
+	/**
+	 * get the ozone
+	 *
+	 * @return number
+	 */
+	this.getOzone = function() {
+		return raw_data.ozone;
+	}
 }
