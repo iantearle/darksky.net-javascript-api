@@ -18,7 +18,7 @@ function ForecastIO() {
 		var onError = onError || function(){};
 		var timestamp = (timestamp) ? ','+timestamp : '';
 
-		var request_url = FORECAST_URL  + FORCAST_API + '/' + latitude + ',' + longitude + timestamp + '?units=uk';
+		var request_url = FORECAST_URL  + FORECAST_API + '/' + latitude + ',' + longitude + timestamp + '?units=uk';
 
 		var xhr = Titanium.Network.createHTTPClient({
 			enableKeepAlive: false
