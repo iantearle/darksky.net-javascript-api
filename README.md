@@ -7,9 +7,6 @@ forecast.io Javascript API
 
 For a how to, simply run index.html - php is required for proxy to work (cross domain policy workaround).
 
-TODO: 
-  Make ASYNCHRONOUS - introduce callbacks.
-
 ti.forecast.io-javascript-api
 =============================
 
@@ -18,8 +15,10 @@ ti.forecast.io Javascript API
 The Titanium version works a little differently. Callbacks help with data manipulation over the standard javascript API,
 there is also no need for a proxy.
 
-    Ti.include("ti.forecast.io.js");
-    var forecast = new ForecastIO();
+    require("ti.forecast.io");
+    var forecast = new ForecastIO({
+	    API_KEY: 'API_KEY'
+    });
     
     var condition = forecast.getCurrentConditions(lat, lon, onSuccessCallback, onErrorCallback);
     
@@ -32,8 +31,6 @@ there is also no need for a proxy.
     };
     
 There are also more returns which will be added into the plain Javascript in due course. 
-
-TODO: CommonJS
     
 The MIT License (MIT)
 
