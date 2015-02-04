@@ -1,0 +1,10 @@
+version: 0.0.9
+description: Forecast.io API Wrapper
+author: Ian Tearle <@iantearle>
+license: MIT
+copyright: Copyright © 2015 Ian Tearle
+name: ti.forecast.io-javascript-api
+moduleid: ti.forecast.io-javascript-api
+guid: 946f6eea-6afd-0508-0954-554899
+platform: commonjs
+minsdk: 3.2.0.GA
