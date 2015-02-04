@@ -1,3 +1,5 @@
+Pull Requests welcome, if you have used this script in a project let me know, i'd like to start a directory. Have fun. 
+
 forecast.io-javascript-api
 ==========================
 
