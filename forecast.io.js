@@ -17,7 +17,7 @@
   }
 }(this, function (moment) {
 
-	/* 	By Ian Tearle 
+	/* 	By Ian Tearle
 		github.com/iantearle
 		Forked and amended by
 		Richard Bultitude
@@ -28,7 +28,7 @@
 
 	function ForecastIO(config) {
 		//var PROXY_SCRIPT = '/proxy.php';
-		if(!config) { 
+		if(!config) {
 			console.log('You must pass ForecastIO configurations');
 		}
 		if(!config.PROXY_SCRIPT) {
@@ -43,7 +43,7 @@
 	//Request data method with added callback
 	//should return a promise
 	ForecastIO.prototype.requestData = function requestData(latitude, longitude) {
-		var requestUrl = this.url + '?url=' + latitude + ',' + longitude + '?units=auto';
+		var requestUrl = this.url + latitude + ',' + longitude;
 		var xhr = new XMLHttpRequest();
 		var content = null;
 		xhr.onreadystatechange = function() {
@@ -110,7 +110,7 @@
 			return false;
 		}
 	};
-	
+
 	/**
 	 * Will return daily conditions for next seven days
 	 *
