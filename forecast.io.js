@@ -43,7 +43,7 @@
 
 	//Request data method with added callback
 	//should return a promise
-	ForecastIO.prototype.requestData = function requestData(latitude, longitude, ready) {
+	ForecastIO.prototype.requestData = function requestData(latitude, longitude) {
 		var requestUrl = this.url + '?url=' + latitude + ',' + longitude + '?units=auto';
 		var xhr = new XMLHttpRequest();
 		var content = null;
@@ -58,15 +58,20 @@
 		        content = xhr.responseText;
 		        var contentJSON = JSON.parse(content);
 		        var currData = new ForecastIOConditions(contentJSON.currently);
-		        ready(currData);
             }
 	        else {
 				console.log('there was a problem getting the weather data. Status: ' + xhr.status + ' State: ' + xhr.readyState);
 				return false;
 	        }
 		};
-		xhr.open('GET', requestUrl, true);
+		xhr.open('GET', requestUrl, false);
 		xhr.send();
+
+		if(content !== '' && (content)) {
+			return JSON.parse(content);
+		} else {
+			return false;
+		}
 	};
 
 	/**
@@ -76,8 +81,13 @@
 	 * @param float $longitude
 	 * @return \ForecastIOConditions|boolean
 	 */
-	ForecastIO.prototype.getCurrentConditions = function getCurrentConditions(latitude, longitude, ready) {
-		var data = this.requestData(latitude, longitude, ready);
+	ForecastIO.prototype.getCurrentConditions = function getCurrentConditions(latitude, longitude) {
+		var data = this.requestData(latitude, longitude);
+		if(data !== false) {
+			return new ForecastIOConditions(data.currently);
+		} else {
+			return false;
+		}
 	};
 
 	/**
