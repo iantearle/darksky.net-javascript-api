@@ -3,17 +3,19 @@
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
-        define([], factory);
+        define(['moment'], function(moment) {
+        	return (root.ForecastIO = factory(moment));
+        });
     } else if (typeof module === 'object' && module.exports) {
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like environments that support module.exports,
         // like Node.
-        module.exports = factory();
+        module.exports = (root.ForecastIO = factory(require('moment')));
     } else {
         // Browser globals (root is window)
-        root.returnExports = factory();
+        root.ForecastIO = factory(root.moment);
   }
-}(this, function () {
+}(this, function (moment) {
 
 	/* 	By Ian Tearle 
 		github.com/iantearle
@@ -54,10 +56,8 @@
             }
             if(xhr.readyState === 4) {
 		        content = xhr.responseText;
-		        //ready(JSON.parse(content));
 		        var contentJSON = JSON.parse(content);
 		        var currData = new ForecastIOConditions(contentJSON.currently);
-		        //console.log('currData', currData);
 		        ready(currData);
             }
 	        else {
@@ -78,6 +78,51 @@
 	 */
 	ForecastIO.prototype.getCurrentConditions = function getCurrentConditions(latitude, longitude, ready) {
 		var data = this.requestData(latitude, longitude, ready);
+	};
+
+	/**
+	 * Will return conditions on hourly basis for today
+	 *
+	 * @param type $latitude
+	 * @param type $longitude
+	 * @return \ForecastIOConditions|boolean
+	 */
+	ForecastIO.prototype.getForecastToday = function getForecastToday(latitude, longitude) {
+		data = this.requestData(latitude, longitude);
+		if(data !== false) {
+			conditions = [];
+			today = moment().format("YYYY-MM-DD");
+			for(i=0; i<data.hourly.data.length; i++) {
+				raw_data = data.hourly.data[i];
+				if(moment.unix(raw_data.time).format("YYYY-MM-DD") == today) {
+					conditions.push(new ForecastIOConditions(raw_data));
+				}
+			}
+			return conditions;
+		} else {
+			return false;
+		}
+	};
+	
+	/**
+	 * Will return daily conditions for next seven days
+	 *
+	 * @param float $latitude
+	 * @param float $longitude
+	 * @return \ForecastIOConditions|boolean
+	 */
+	ForecastIO.prototype.getForecastWeek = function getForecastWeek(latitude, longitude) {
+		data = this.requestData(latitude, longitude);
+		if(data !== false) {
+			conditions = [];
+			for(i=0; i<data.daily.data.length; i++) {
+				raw_data = data.daily.data[i];
+				conditions.push(new ForecastIOConditions(raw_data));
+			}
+			return conditions;
+		} else {
+			return false;
+		}
 	};
 
 	function ForecastIOConditions(raw_data) {
@@ -117,11 +162,11 @@
 		 */
 		this.getTime = function(format) {
 			format = 'feature not available';
-			// if(!format) {
-			// 	return raw_data.time;
-			// } else {
-			// 	return moment.unix(raw_data.time).format(format);
-			// }
+			if(!format) {
+				return raw_data.time;
+			} else {
+				return moment.unix(raw_data.time).format(format);
+			}
 		};
 		/**
 		 * Get the pressure
