@@ -28,7 +28,6 @@
 
 	function ForecastIO(config) {
 		//var PROXY_SCRIPT = '/proxy.php';
-		console.log('config', config);
 		if(!config) { 
 			console.log('You must pass ForecastIO configurations');
 		}
@@ -56,8 +55,6 @@
             }
             if(xhr.readyState === 4) {
 		        content = xhr.responseText;
-		        var contentJSON = JSON.parse(content);
-		        var currData = new ForecastIOConditions(contentJSON.currently);
             }
 	        else {
 				console.log('there was a problem getting the weather data. Status: ' + xhr.status + ' State: ' + xhr.readyState);
