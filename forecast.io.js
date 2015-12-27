@@ -44,7 +44,7 @@
 	//Request data method with added callback
 	//should return a promise
 	ForecastIO.prototype.requestData = function requestData(latitude, longitude, ready) {
-		var request_url = this.url + '?url=' + latitude + ',' + longitude + '?units=auto';
+		var requestUrl = this.url + '?url=' + latitude + ',' + longitude + '?units=auto';
 		var xhr = new XMLHttpRequest();
 		var content = null;
 		xhr.onreadystatechange = function() {
@@ -65,7 +65,7 @@
 				return false;
 	        }
 		};
-		xhr.open('GET', request_url, true);
+		xhr.open('GET', requestUrl, true);
 		xhr.send();
 	};
 
@@ -88,14 +88,14 @@
 	 * @return \ForecastIOConditions|boolean
 	 */
 	ForecastIO.prototype.getForecastToday = function getForecastToday(latitude, longitude) {
-		data = this.requestData(latitude, longitude);
+		var data = this.requestData(latitude, longitude);
 		if(data !== false) {
-			conditions = [];
-			today = moment().format("YYYY-MM-DD");
-			for(i=0; i<data.hourly.data.length; i++) {
-				raw_data = data.hourly.data[i];
-				if(moment.unix(raw_data.time).format("YYYY-MM-DD") == today) {
-					conditions.push(new ForecastIOConditions(raw_data));
+			var conditions = [];
+			var today = moment().format('YYYY-MM-DD');
+			for(var i = 0; i < data.hourly.data.length; i++) {
+				var rawData = data.hourly.data[i];
+				if(moment.unix(rawData.time).format('YYYY-MM-DD') === today) {
+					conditions.push(new ForecastIOConditions(rawData));
 				}
 			}
 			return conditions;
@@ -112,12 +112,12 @@
 	 * @return \ForecastIOConditions|boolean
 	 */
 	ForecastIO.prototype.getForecastWeek = function getForecastWeek(latitude, longitude) {
-		data = this.requestData(latitude, longitude);
+		var data = this.requestData(latitude, longitude);
 		if(data !== false) {
-			conditions = [];
-			for(i=0; i<data.daily.data.length; i++) {
-				raw_data = data.daily.data[i];
-				conditions.push(new ForecastIOConditions(raw_data));
+			var conditions = [];
+			for(var i = 0; i < data.daily.data.length; i++) {
+				var rawData = data.daily.data[i];
+				conditions.push(new ForecastIOConditions(rawData));
 			}
 			return conditions;
 		} else {
@@ -125,9 +125,9 @@
 		}
 	};
 
-	function ForecastIOConditions(raw_data) {
+	function ForecastIOConditions(rawData) {
 		ForecastIOConditions.prototype = {
-			raw_data: raw_data
+			rawData: rawData
 		};
 		/**
 		 * Will return the temperature
@@ -135,7 +135,7 @@
 		 * @return String
 		 */
 		this.getTemperature = function() {
-			return raw_data.temperature;
+			return rawData.temperature;
 		};
 		/**
 		 * Get the summary of the conditions
@@ -143,7 +143,7 @@
 		 * @return String
 		 */
 		this.getSummary = function() {
-			return raw_data.summary;
+			return rawData.summary;
 		};
 		/**
 		 * Get the icon of the conditions
@@ -151,7 +151,7 @@
 		 * @return String
 		 */
 		this.getIcon = function() {
-			return raw_data.icon;
+			return rawData.icon;
 		};
 		/**
 		 * Get the time, when $format not set timestamp else formatted time
@@ -163,9 +163,9 @@
 		this.getTime = function(format) {
 			format = 'feature not available';
 			if(!format) {
-				return raw_data.time;
+				return rawData.time;
 			} else {
-				return moment.unix(raw_data.time).format(format);
+				return moment.unix(rawData.time).format(format);
 			}
 		};
 		/**
@@ -174,7 +174,7 @@
 		 * @return String
 		 */
 		this.getPressure = function() {
-			return raw_data.pressure;
+			return rawData.pressure;
 		};
 		/**
 		 * get humidity
@@ -182,7 +182,7 @@
 		 * @return String
 		 */
 		this.getHumidity = function() {
-			return raw_data.humidity;
+			return rawData.humidity;
 		};
 		/**
 		 * Get the wind speed
@@ -190,7 +190,7 @@
 		 * @return String
 		 */
 		this.getWindSpeed = function() {
-			return raw_data.windSpeed;
+			return rawData.windSpeed;
 		};
 		/**
 		 * Get wind direction
@@ -198,7 +198,7 @@
 		 * @return type
 		 */
 		this.getWindBearing = function() {
-			return raw_data.windBearing;
+			return rawData.windBearing;
 		};
 		/**
 		 * get precipitation type
@@ -206,7 +206,7 @@
 		 * @return type
 		 */
 		this.getPrecipitationType = function() {
-			return raw_data.precipType;
+			return rawData.precipType;
 		};
 		/**
 		 * get the probability 0..1 of precipitation type
@@ -214,7 +214,7 @@
 		 * @return type
 		 */
 		this.getPrecipitationProbability = function() {
-			return raw_data.precipProbability;
+			return rawData.precipProbability;
 		};
 		/**
 		 * Get the cloud cover
@@ -222,7 +222,7 @@
 		 * @return type
 		 */
 		this.getCloudCover = function() {
-			return raw_data.cloudCover;
+			return rawData.cloudCover;
 		};
 		/**
 		 * get the min temperature
@@ -232,7 +232,7 @@
 		 * @return type
 		 */
 		this.getMinTemperature = function() {
-			return raw_data.temperatureMin;
+			return rawData.temperatureMin;
 		};
 		/**
 		 * get max temperature
@@ -242,7 +242,7 @@
 		 * @return type
 		 */
 		this.getMaxTemperature = function() {
-			return raw_data.temperatureMax;
+			return rawData.temperatureMax;
 		};
 		/**
 		 * get sunrise time
@@ -252,7 +252,7 @@
 		 * @return type
 		 */
 		this.getSunrise = function() {
-			return raw_data.sunriseTime;
+			return rawData.sunriseTime;
 		};
 		/**
 		 * get sunset time
@@ -262,7 +262,7 @@
 		 * @return type
 		 */
 		this.getSunset = function() {
-			return raw_data.sunsetTime;
+			return rawData.sunsetTime;
 		};
 		/**
 		 * get precipitation intensity
@@ -270,7 +270,7 @@
 		 * @return number
 		 */
 		this.getPrecipIntensity = function() {
-			return raw_data.precipIntensity;
+			return rawData.precipIntensity;
 		};
 		/**
 		 * get dew point
@@ -278,7 +278,7 @@
 		 * @return number
 		 */
 		this.getDewPoint = function() {
-			return raw_data.dewPoint;
+			return rawData.dewPoint;
 		};
 		/**
 		 * get the ozone
@@ -286,7 +286,7 @@
 		 * @return number
 		 */
 		this.getOzone = function() {
-			return raw_data.ozone;
+			return rawData.ozone;
 		};
 	}
 
