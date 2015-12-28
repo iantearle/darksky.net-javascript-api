@@ -19,9 +19,12 @@
 
 	/* 	By Ian Tearle 
 		github.com/iantearle
-		Forked and amended by
+		
+		Other contributors
 		Richard Bultitude
 		github.com/rjbultitude
+		Brandon Love
+		github.com/brandonlove
 	*/
 
 	//Forecast Class
@@ -40,10 +43,9 @@
 		this.url = (typeof config.PROXY_SCRIPT !== 'undefined') ? config.PROXY_SCRIPT : 'https://api.forecast.io/forecast/' + config.API_KEY + '/';
 	}
 
-	//Request data method with added callback
-	//should return a promise
 	ForecastIO.prototype.requestData = function requestData(latitude, longitude) {
 		var requestUrl = this.url + '?url=' + latitude + ',' + longitude + '?units=auto';
+		console.log('requestUrl', requestUrl);
 		var xhr = new XMLHttpRequest();
 		var content = null;
 		xhr.onreadystatechange = function() {
