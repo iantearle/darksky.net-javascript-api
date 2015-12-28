@@ -19,9 +19,12 @@
 
 	/* 	By Ian Tearle 
 		github.com/iantearle
-		Forked and amended by
+		
+		Other contributors
 		Richard Bultitude
 		github.com/rjbultitude
+		Brandon Love
+		github.com/brandonlove
 	*/
 
 	//Forecast Class
@@ -41,27 +44,28 @@
 		this.url = (typeof config.PROXY_SCRIPT !== 'undefined') ? config.PROXY_SCRIPT : 'https://api.forecast.io/forecast/' + config.API_KEY + '/';
 	}
 
-	//Request data method with added callback
-	//should return a promise
 	ForecastIO.prototype.requestData = function requestData(latitude, longitude) {
 		var requestUrl = this.url + '?url=' + latitude + ',' + longitude + '?units=auto';
 		return $.ajax({
-			url: requestUrl,
-			success: function(data) {
-				console.log('SUCCESS: ', data);
-			},
-			error: function(data) {
-				console.log('ERROR: ', data);
-			}
+			url: requestUrl
+			//For debug purposes
+			// success: function(data) {
+			// 	console.log('success: ', data);
+			// },
+			// error: function(data) {
+			// 	console.log('error: ', data);
+			// }
 		});
 	};
 
 	/**
-	 * Will return the current conditions
+	 * Will pass the current conditions
+	 * into the app callback
 	 *
 	 * @param float $latitude
 	 * @param float $longitude
-	 * @return \ForecastIOConditions|boolean
+	 * @param function $appFn
+	 * @return boolean
 	 */
 	ForecastIO.prototype.getCurrentConditions = function getCurrentConditions(latitude, longitude, appFn) {
 		var content = this.requestData(latitude, longitude);
