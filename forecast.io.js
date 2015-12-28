@@ -73,24 +73,22 @@
 			var content = this.requestData(locations[i].latitude, locations[i].longitude);
 			locDataArr.push(content);
 		}
+		console.log('locDataArr', locDataArr);
 		$.when.apply($, locDataArr)
 			.done(function() {
+				var total = 0;
 				var dataSets = [];
 				argLoop:
 				for (var i = 0; i < arguments.length; i++) {
-					console.log('arguments[i]', arguments[i]);
-					if (typeof arguments[i] === 'string') {
-						if (arguments[i] !== 'success') {
-							var jsonData = JSON.parse(arguments[i]);
-							var currently = new ForecastIOConditions(jsonData.currently);
-						}
-						else {
-							continue argLoop;
-						}
-					}
+					total += 1;
+					//console.log('arguments[i]', arguments[i]);
+					var jsonData = JSON.parse(arguments[i][0]);
+					var currently = new ForecastIOConditions(jsonData.currently);
 					dataSets.push(currently);
+					if (total === locations.length) {
+						appFn(dataSets);
+					}
 				}
-				appFn(dataSets);
 			})
 			.fail(function() {
 				console.log('error retrieving data');
