@@ -45,7 +45,6 @@
 
 	ForecastIO.prototype.requestData = function requestData(latitude, longitude) {
 		var requestUrl = this.url + '?url=' + latitude + ',' + longitude + '?units=auto';
-		console.log('requestUrl', requestUrl);
 		var xhr = new XMLHttpRequest();
 		var content = null;
 		xhr.onreadystatechange = function() {
