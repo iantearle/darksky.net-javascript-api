@@ -31,6 +31,13 @@
 	    //the module value for "helper/util".
 	    var latitude = '52.4308';
 		var longitude = '13.2588';
+
+		var locations = [
+			{
+				latitude: latitude, 
+				longitude: longitude
+			}
+		]; 
 		
 		var forecast = new ForecastIO({
 			PROXY_SCRIPT: 'proxy.php'
@@ -39,39 +46,37 @@
 		/*
 		 * GET CURRENT CONDITIONS
 		 */
-		forecast.getCurrentConditions(latitude, longitude, function(condition) {
-			console.log('condition', condition);
+		forecast.getCurrentConditions(locations, function(conditions) {
 			// echo temperature
-			document.getElementById("currentTemp").innerHTML = condition.getTemperature();
+			document.getElementById("currentTemp").innerHTML = conditions[0].getTemperature();
 		});
-		// $.when(condition).done(function(condition) {
 		
-		// 	/*
-		// 	 * GET HOURLY CONDITIONS FOR TODAY
-		// 	 */
-		// 	var conditions_today = forecast.getForecastToday(latitude, longitude);
-		// 	var items = '';
+			// /*
+			//  * GET HOURLY CONDITIONS FOR TODAY
+			//  */
+			// var conditions_today = forecast.getForecastToday(latitude, longitude);
+			// var items = '';
 		
-		// 	for(i=0; i<conditions_today.length; i++) {
-		// 		items += "<li>"  + conditions_today[i].getTime('HH:mm') + ': ' + conditions_today[i].getTemperature() + "</li>";
-		// 	}
+			// for(i=0; i<conditions_today.length; i++) {
+			// 	items += "<li>"  + conditions_today[i].getTime('HH:mm') + ': ' + conditions_today[i].getTemperature() + "</li>";
+			// }
 		
-		// 	document.getElementById("itemList").innerHTML = items;
+			// document.getElementById("itemList").innerHTML = items;
 		
-		// 	/*
-		// 	 * GET DAILY CONDITIONS FOR NEXT 7 DAYS
-		// 	 */
-		
-		// 	var conditions_week = forecast.getForecastWeek(latitude, longitude);
-		// 	var items2 = '';
-		
-		// 	for(i=0; i<conditions_week.length; i++) {
-		// 		items2 += "<li>"  + conditions_week[i].getTime('YYYY-MM-DD') + ': ' + conditions_week[i].getMaxTemperature() + "</li>";
-		// 	}
-		
-		// 	document.getElementById("itemList2").innerHTML = items2;	
 			
-		// });
+			//  * GET DAILY CONDITIONS FOR NEXT 7 DAYS
+			 
+		
+			// var conditions_week = forecast.getForecastWeek(latitude, longitude);
+			// var items2 = '';
+		
+			// for(i=0; i<conditions_week.length; i++) {
+			// 	items2 += "<li>"  + conditions_week[i].getTime('YYYY-MM-DD') + ': ' + conditions_week[i].getMaxTemperature() + "</li>";
+			// }
+		
+			// document.getElementById("itemList2").innerHTML = items2;	
+			
+		//});
 	
 	});	
 

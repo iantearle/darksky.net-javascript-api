@@ -67,15 +67,30 @@
 	 * @param function $appFn
 	 * @return boolean
 	 */
-	ForecastIO.prototype.getCurrentConditions = function getCurrentConditions(latitude, longitude, appFn) {
-		var content = this.requestData(latitude, longitude);
-		$.when(content)
-			.done(function(data) {
-				console.log('data', data);
-				var jsonData = JSON.parse(data);
-				var currently = new ForecastIOConditions(jsonData.currently);
-
-				appFn(currently);
+	ForecastIO.prototype.getCurrentConditions = function getCurrentConditions(locations, appFn) {
+		var locDataArr = [];
+		for (var i = 0; i < locations.length; i++) {
+			var content = this.requestData(locations[i].latitude, locations[i].longitude);
+			locDataArr.push(content);
+		}
+		$.when.apply($, locDataArr)
+			.done(function() {
+				var dataSets = [];
+				argLoop:
+				for (var i = 0; i < arguments.length; i++) {
+					console.log('arguments[i]', arguments[i]);
+					if (typeof arguments[i] === 'string') {
+						if (arguments[i] !== 'success') {
+							var jsonData = JSON.parse(arguments[i]);
+							var currently = new ForecastIOConditions(jsonData.currently);
+						}
+						else {
+							continue argLoop;
+						}
+					}
+					dataSets.push(currently);
+				}
+				appFn(dataSets);
 			})
 			.fail(function() {
 				console.log('error retrieving data');
