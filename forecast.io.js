@@ -62,8 +62,7 @@
 	 * Will pass the current conditions
 	 * into the app callback
 	 *
-	 * @param float $latitude
-	 * @param float $longitude
+	 * @param object $locations
 	 * @param function $appFn
 	 * @return boolean
 	 */
@@ -87,6 +86,7 @@
 					dataSets.push(currently);
 					if (total === locations.length) {
 						appFn(dataSets);
+						return dataSets;
 					}
 				}
 			})

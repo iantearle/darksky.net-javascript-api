@@ -13,7 +13,8 @@
 
 <body>
 
-	<h1 id="currentTemp"></h1>
+	<h1 id="currentTemp1"></h1>
+	<h1 id="currentTemp2"></h1>
 
 	<ul id="itemList"></ul>
 
@@ -52,7 +53,8 @@
 		 */
 		forecast.getCurrentConditions(locations, function(conditions) {
 			// echo temperature
-			document.getElementById("currentTemp").innerHTML = conditions[0].getTemperature();
+			document.getElementById("currentTemp1").innerHTML = conditions[0].getTemperature();
+			document.getElementById("currentTemp2").innerHTML = conditions[1].getTemperature();
 		});
 		
 			// /*
