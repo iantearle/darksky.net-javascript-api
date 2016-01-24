@@ -132,12 +132,12 @@
 					var jsonData = JSON.parse(arguments[i][0]);
 					for (var j = 0; j < jsonData.hourly.data.length; j++) {
 						var hourlyData = jsonData.hourly.data[j];
-						console.log('hourlyData', hourlyData);
 						if (moment.unix(hourlyData.time).format('YYYY-MM-DD') === today) {
 							dataSets.push(new ForecastIOConditions(hourlyData));
 						}
 					}
 				}
+				console.log('dataSets', dataSets);
 				appFn(dataSets);
 				return dataSets;
 			})
