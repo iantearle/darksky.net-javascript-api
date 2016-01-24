@@ -13,7 +13,8 @@
 
 <body>
 
-	<h1 id="currentTemp"></h1>
+	<h1 id="currentTemp1"></h1>
+	<h1 id="currentTemp2"></h1>
 
 	<ul id="itemList"></ul>
 
@@ -24,13 +25,24 @@
 	<script src="require.js"></script>
 <!--	<script src="forecast.io.js"</script> -->
 	<script>
-	var ForecastIO = require(["forecast.io"], function(ForecastIO) {
+	var ForecastIO = require(["forecast.io", "jquery"], function(ForecastIO, $) {
 	    //This function is called when scripts/helper/util.js is loaded.
 	    //If util.js calls define(), then this function is not fired until
 	    //util's dependencies have loaded, and the util argument will hold
 	    //the module value for "helper/util".
 	    var latitude = '52.4308';
 		var longitude = '13.2588';
+
+		var locations = [
+			{
+				latitude: latitude, 
+				longitude: longitude
+			},
+			{
+				latitude: '22.4308', 
+				longitude: '3.2588'
+			}
+		]; 
 		
 		var forecast = new ForecastIO({
 			PROXY_SCRIPT: 'proxy.php'
@@ -41,35 +53,39 @@
 		/*
 		 * GET CURRENT CONDITIONS
 		 */
-		var condition = forecast.getCurrentConditions(latitude, longitude);
+		forecast.getCurrentConditions(locations, function(conditions) {
+			// echo temperature
+			document.getElementById("currentTemp1").innerHTML = conditions[0].getTemperature();
+			document.getElementById("currentTemp2").innerHTML = conditions[1].getTemperature();
+		});
+		
+			// /*
+			//  * GET HOURLY CONDITIONS FOR TODAY
+			//  */
+			// var conditions_today = forecast.getForecastToday(latitude, longitude);
+			// var items = '';
+		
+			// for(i=0; i<conditions_today.length; i++) {
+			// 	items += "<li>"  + conditions_today[i].getTime('HH:mm') + ': ' + conditions_today[i].getTemperature() + "</li>";
+			// }
+		
+			// document.getElementById("itemList").innerHTML = items;
+		
+			
+			//  * GET DAILY CONDITIONS FOR NEXT 7 DAYS
+			 
+		
+			// var conditions_week = forecast.getForecastWeek(latitude, longitude);
+			// var items2 = '';
+		
+			// for(i=0; i<conditions_week.length; i++) {
+			// 	items2 += "<li>"  + conditions_week[i].getTime('YYYY-MM-DD') + ': ' + conditions_week[i].getMaxTemperature() + "</li>";
+			// }
+		
+			// document.getElementById("itemList2").innerHTML = items2;	
+			
+		//});
 	
-		// echo temperature
-		document.getElementById("currentTemp").innerHTML = condition.getTemperature();
-	
-		/*
-		 * GET HOURLY CONDITIONS FOR TODAY
-		 */
-		var conditions_today = forecast.getForecastToday(latitude, longitude);
-		var items = '';
-	
-		for(i=0; i<conditions_today.length; i++) {
-			items += "<li>"  + conditions_today[i].getTime('HH:mm') + ': ' + conditions_today[i].getTemperature() + "</li>";
-		}
-	
-		document.getElementById("itemList").innerHTML = items;
-	
-		/*
-		 * GET DAILY CONDITIONS FOR NEXT 7 DAYS
-		 */
-	
-		var conditions_week = forecast.getForecastWeek(latitude, longitude);
-		var items2 = '';
-	
-		for(i=0; i<conditions_week.length; i++) {
-			items2 += "<li>"  + conditions_week[i].getTime('YYYY-MM-DD') + ': ' + conditions_week[i].getMaxTemperature() + "</li>";
-		}
-	
-		document.getElementById("itemList2").innerHTML = items2;	
 	});	
 
 	</script>
