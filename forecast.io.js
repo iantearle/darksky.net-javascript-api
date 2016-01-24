@@ -28,7 +28,12 @@
 	*/
 
 	//Forecast Class
-
+	/**
+	 * Will construct a new ForecastIO object
+	 *
+	 * @param string $config
+	 * @return boolean
+	 */
 	function ForecastIO(config) {
 		//var PROXY_SCRIPT = '/proxy.php';
 		console.log('config', config);
@@ -44,8 +49,17 @@
 		this.url = (typeof config.PROXY_SCRIPT !== 'undefined') ? config.PROXY_SCRIPT : 'https://api.forecast.io/forecast/' + config.API_KEY + '/';
 	}
 
+	/**
+	 * Will build a url string from the lat long coords
+	 * and return a promise with the json
+	 *
+	 * @param number $latitude
+	 * @param number $longitude
+	 * @return object
+	 */
 	ForecastIO.prototype.requestData = function requestData(latitude, longitude) {
 		var requestUrl = this.url + '?url=' + latitude + ',' + longitude + '?units=auto';
+		
 		return $.ajax({
 			url: requestUrl
 			//For debug purposes
