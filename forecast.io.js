@@ -19,7 +19,7 @@
 
 	/* 	By Ian Tearle
 		github.com/iantearle
-		
+
 		Other contributors
 		Richard Bultitude
 		github.com/rjbultitude
@@ -40,7 +40,7 @@
 			}
 		}
 		this.API_KEY = config.API_KEY;
-		this.url = (typeof config.PROXY_SCRIPT !== 'undefined') ? config.PROXY_SCRIPT : 'https://api.forecast.io/forecast/' + config.API_KEY + '/';
+		this.url = (typeof config.PROXY_SCRIPT !== 'undefined') ? config.PROXY_SCRIPT + '?url=': 'https://api.forecast.io/forecast/' + config.API_KEY + '/';
 	}
 
 	ForecastIO.prototype.requestData = function requestData(latitude, longitude) {
@@ -163,13 +163,11 @@
 		};
 		/**
 		 * Get the time, when $format not set timestamp else formatted time
-		 * Disabled due to moment js not supporting CJS
 		 *
 		 * @param String $format
 		 * @return String
 		 */
 		this.getTime = function(format) {
-			format = 'feature not available';
 			if(!format) {
 				return rawData.time;
 			} else {
