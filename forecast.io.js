@@ -95,8 +95,8 @@
 	 * @return boolean
 	 */
 	ForecastIO.prototype.getCurrentConditions = function getCurrentConditions(locations, appFn) {
-		var alllocDataArr = this.requestAllLocData(locations);
-		$.when.apply($, alllocDataArr)
+		var allLocDataArr = this.requestAllLocData(locations);
+		$.when.apply($, allLocDataArr)
 			.done(function() {
 				var dataSets = [];
 				argLoop:
@@ -114,23 +114,27 @@
 	};
 
 	/**
+	 * Will pass the current conditions
+	 * into the app callback
 	 * Will return conditions on hourly basis for today
 	 *
-	 * @param type $latitude
-	 * @param type $longitude
-	 * @return \ForecastIOConditions|boolean
+	 * @param object $locations
+	 * @param function $appFn
+	 * @return boolean
 	 */
 	ForecastIO.prototype.getForecastToday = function getForecastToday(locations, appFn) {
-		var alllocDataArr = requestAllLocData(locations);
-		$.when.apply($, alllocDataArr)
+		var allLocDataArr = this.requestAllLocData(locations);
+		$.when.apply($, allLocDataArr)
 			.done(function() {
 				var dataSets = [];
 				for (var i = 0; i < arguments.length; i++) {
 					var today = moment().format('YYYY-MM-DD');
-					for (var i = 0; i < data.hourly.data.length; i++) {
-						var rawData = data.hourly.data[i];
-						if (moment.unix(rawData.time).format('YYYY-MM-DD') === today) {
-							dataSets.push(new ForecastIOConditions(rawData));
+					var jsonData = JSON.parse(arguments[i][0]);
+					for (var j = 0; j < jsonData.hourly.data.length; j++) {
+						var hourlyData = jsonData.hourly.data[j];
+						console.log('hourlyData', hourlyData);
+						if (moment.unix(hourlyData.time).format('YYYY-MM-DD') === today) {
+							dataSets.push(new ForecastIOConditions(hourlyData));
 						}
 					}
 				}
@@ -143,24 +147,29 @@
 	};
 
 	/**
+	 * Will pass the current conditions
+	 * into the app callback
 	 * Will return daily conditions for next seven days
 	 *
-	 * @param float $latitude
-	 * @param float $longitude
-	 * @return \ForecastIOConditions|boolean
+	 * @param object $locations
+	 * @param function $appFn
+	 * @return boolean
 	 */
 	ForecastIO.prototype.getForecastWeek = function getForecastWeek(locations, appFn) {
-		var alllocDataArr = requestAllLocData(locations);
-		$.when.apply($, alllocDataArr)
+		var allLocDataArr = this.requestAllLocData(locations);
+		$.when.apply($, allLocDataArr)
 			.done(function() {
 				var dataSets = [];
-				for (var i = 0; i < data.daily.data.length; i++) {
-					var rawData = data.daily.data[i];
-					conditions.push(new ForecastIOConditions(rawData));
+				for (var i = 0; i < arguments.length; i++) {
+					var jsonData = JSON.parse(arguments[i][0]);
+					for (var j = 0; j < jsonData.daily.data.length; j++) {
+						var dailyData = jsonData.daily.data[j];
+						dataSets.push(new ForecastIOConditions(dailyData));
+					}
 				}
 				appFn(dataSets);
 				return dataSets;
-			)}
+			})
 			.fail(function() {
 				console.log('error retrieving data');
 			});

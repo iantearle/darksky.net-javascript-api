@@ -25,11 +25,11 @@
 	<script src="require.js"></script>
 <!--	<script src="forecast.io.js"</script> -->
 	<script>
-	var ForecastIO = require(["forecast.io", "jquery"], function(ForecastIO, $) {
+	var ForecastIO = require(['forecast.io', 'jquery'], function(ForecastIO, $) {
 	    //This function is called when scripts/helper/util.js is loaded.
 	    //If util.js calls define(), then this function is not fired until
 	    //util's dependencies have loaded, and the util argument will hold
-	    //the module value for "helper/util".
+	    //the module value for 'helper/util'.
 	    var latitude = '52.4308';
 		var longitude = '13.2588';
 
@@ -55,37 +55,34 @@
 		 */
 		forecast.getCurrentConditions(locations, function(conditions) {
 			// echo temperature
-			document.getElementById("currentTemp1").innerHTML = conditions[0].getTemperature();
-			document.getElementById("currentTemp2").innerHTML = conditions[1].getTemperature();
+			document.getElementById('currentTemp1').innerHTML = conditions[0].getTemperature();
+			document.getElementById('currentTemp2').innerHTML = conditions[1].getTemperature();
+		});
+
+		// /*
+		//  * GET HOURLY CONDITIONS FOR TODAY
+		//  */
+		forecast.getForecastToday(locations, function(conditions) {
+			var items = '';
+		
+			for (var i = 0; i < conditions.length; i++) {
+				items += '<li>' + conditions[i].getTime('HH:mm') + ': ' + conditions[i].getTemperature() + '</li>';
+			}
+		
+			document.getElementById('itemList').innerHTML = items;
 		});
 		
-			// /*
-			//  * GET HOURLY CONDITIONS FOR TODAY
-			//  */
-			// var conditions_today = forecast.getForecastToday(latitude, longitude);
-			// var items = '';
-		
-			// for(i=0; i<conditions_today.length; i++) {
-			// 	items += "<li>"  + conditions_today[i].getTime('HH:mm') + ': ' + conditions_today[i].getTemperature() + "</li>";
-			// }
-		
-			// document.getElementById("itemList").innerHTML = items;
-		
 			
-			//  * GET DAILY CONDITIONS FOR NEXT 7 DAYS
-			 
+		//  * GET DAILY CONDITIONS FOR NEXT 7 DAYS
+		forecast.getForecastWeek(locations, function(conditions) {
+			var items2 = '';
 		
-			// var conditions_week = forecast.getForecastWeek(latitude, longitude);
-			// var items2 = '';
+			for (var j = 0; j < conditions.length; j++) {
+				items2 += '<li>' + conditions[j].getTime('YYYY-MM-DD') + ': ' + conditions[j].getMaxTemperature() + '</li>';
+			}
 		
-			// for(i=0; i<conditions_week.length; i++) {
-			// 	items2 += "<li>"  + conditions_week[i].getTime('YYYY-MM-DD') + ': ' + conditions_week[i].getMaxTemperature() + "</li>";
-			// }
-		
-			// document.getElementById("itemList2").innerHTML = items2;	
-			
-		//});
-	
+			document.getElementById('itemList2').innerHTML = items2;
+		});
 	});	
 
 	</script>
