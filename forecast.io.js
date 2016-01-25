@@ -22,7 +22,7 @@
 		// Browser globals (root is window)
 		root.ForecastIO = factory(root.moment, root.$);
 	}
-}(this, function(moment) {
+}(this, function(moment, $) {
 
 	/* 	By Ian Tearle 
 		github.com/iantearle
