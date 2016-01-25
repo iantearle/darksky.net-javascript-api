@@ -12,14 +12,19 @@
 </head>
 
 <body>
+	<h1>Forecast.io JS API</h1>
 
-	<h1 id="currentTemp1"></h1>
-	<h1 id="currentTemp2"></h1>
+	<h2>Current Temperatures</h2>
+	<ul id="currentTemp"></ul>
 
+	<hr>
+
+	<h2>Forecast for today</h2>
 	<ul id="itemList"></ul>
 
 	<hr>
 
+	<h2>Forecast for the week</h2>
 	<ul id="itemList2"></ul>
 
 	<script src="require.js"></script>
@@ -30,13 +35,14 @@
 	    //If util.js calls define(), then this function is not fired until
 	    //util's dependencies have loaded, and the util argument will hold
 	    //the module value for 'helper/util'.
-	    var latitude = '52.4308';
-		var longitude = '13.2588';
 
+	    /*
+		 * EXAMPLE LOCATION DATA
+		 */
 		var locations = [
 			{
-				latitude: latitude, 
-				longitude: longitude
+				latitude: '52.4308', 
+				longitude: '13.2588'
 			},
 			{
 				latitude: '22.4308', 
@@ -47,21 +53,23 @@
 		var forecast = new ForecastIO({
 			PROXY_SCRIPT: 'proxy.php'
 		});
-
-		console.log('forecast', forecast);
 	
 		/*
 		 * GET CURRENT CONDITIONS
 		 */
 		forecast.getCurrentConditions(locations, function(conditions) {
+			var items = '';
 			// echo temperature
-			document.getElementById('currentTemp1').innerHTML = conditions[0].getTemperature();
-			document.getElementById('currentTemp2').innerHTML = conditions[1].getTemperature();
+			for (var i = 0; i < conditions.length; i++) {
+				items += '<li>' + conditions[i].getTemperature(); + '</li>';
+			}
+			document.getElementById('currentTemp').innerHTML = items;
+
 		});
 
-		// /*
-		//  * GET HOURLY CONDITIONS FOR TODAY
-		//  */
+		/*
+		 * GET HOURLY CONDITIONS FOR TODAY
+		 */
 		forecast.getForecastToday(locations, function(conditions) {
 			var items = '';
 		
@@ -72,13 +80,14 @@
 			document.getElementById('itemList').innerHTML = items;
 		});
 		
-			
-		//  * GET DAILY CONDITIONS FOR NEXT 7 DAYS
+		/*	
+		 * GET DAILY CONDITIONS FOR NEXT 7 DAYS
+		 */ 
 		forecast.getForecastWeek(locations, function(conditions) {
 			var items2 = '';
 		
-			for (var j = 0; j < conditions.length; j++) {
-				items2 += '<li>' + conditions[j].getTime('YYYY-MM-DD') + ': ' + conditions[j].getMaxTemperature() + '</li>';
+			for (var i = 0; i < conditions.length; i++) {
+				items2 += '<li>' + conditions[i].getTime('YYYY-MM-DD') + ': ' + conditions[i].getMaxTemperature() + '</li>';
 			}
 		
 			document.getElementById('itemList2').innerHTML = items2;

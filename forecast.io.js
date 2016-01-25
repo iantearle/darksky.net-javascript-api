@@ -52,7 +52,7 @@
 			}
 		}
 		this.API_KEY = config.API_KEY;
-		this.url = (typeof config.PROXY_SCRIPT !== 'undefined') ? config.PROXY_SCRIPT : 'https://api.forecast.io/forecast/' + config.API_KEY + '/';
+		this.url = (typeof config.PROXY_SCRIPT !== 'undefined') ? config.PROXY_SCRIPT + '?url=': 'https://api.forecast.io/forecast/' + config.API_KEY + '/';
 	}
 
 	/**
@@ -61,19 +61,15 @@
 	 *
 	 * @param number $latitude
 	 * @param number $longitude
-	 * @return object
+	 * @return promise object
 	 */
 	ForecastIO.prototype.requestData = function requestData(latitude, longitude) {
-		var requestUrl = this.url + '?url=' + latitude + ',' + longitude + '?units=auto';
+		var requestUrl = this.url + latitude + ',' + longitude + '?units=auto';
 		return $.ajax({
-			url: requestUrl
-			//For debug purposes
-			// success: function(data) {
-			// 	console.log('success: ', data);
-			// },
-			// error: function(data) {
-			// 	console.log('error: ', data);
-			// }
+			url: requestUrl,
+			error: function(data) {
+				console.log('Error: Date not loaded: ', data);
+			}
 		});
 	};
 
@@ -137,7 +133,6 @@
 						}
 					}
 				}
-				console.log('dataSets', dataSets);
 				appFn(dataSets);
 				return dataSets;
 			})
@@ -205,13 +200,11 @@
 		};
 		/**
 		 * Get the time, when $format not set timestamp else formatted time
-		 * Disabled due to moment js not supporting CJS
 		 *
 		 * @param String $format
 		 * @return String
 		 */
 		this.getTime = function(format) {
-			format = 'feature not available';
 			if (!format) {
 				return rawData.time;
 			} else {
