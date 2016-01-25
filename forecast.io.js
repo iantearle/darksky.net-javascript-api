@@ -83,8 +83,8 @@
 	};
 
 	/**
-	 * Will pass the current conditions
-	 * into the app callback
+	 * Will take a locations object and a callback function
+	 * and pass the current conditions into the callback
 	 *
 	 * @param object $locations
 	 * @param function $appFn
@@ -110,9 +110,8 @@
 	};
 
 	/**
-	 * Will pass the current conditions
-	 * into the app callback
-	 * Will return conditions on hourly basis for today
+	 * Will take a locations object and a callback function
+	 * and pass the conditions on hourly basis for today into the callback
 	 *
 	 * @param object $locations
 	 * @param function $appFn
@@ -142,9 +141,8 @@
 	};
 
 	/**
-	 * Will pass the current conditions
-	 * into the app callback
-	 * Will return daily conditions for next seven days
+	 * Will take a locations object and a callback function
+	 * and pass the daily conditions for next seven days into the callback
 	 *
 	 * @param object $locations
 	 * @param function $appFn
