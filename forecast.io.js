@@ -64,11 +64,11 @@
 	 * @return promise object
 	 */
 	ForecastIO.prototype.requestData = function requestData(latitude, longitude) {
-		var requestUrl = this.url + latitude + ',' + longitude + '?units=auto';
+		var requestUrl = this.url + latitude + ',' + longitude;
 		return $.ajax({
 			url: requestUrl,
 			error: function(data) {
-				console.log('Error: Date not loaded: ', data);
+				console.log('Error: Data not loaded: ', data);
 			}
 		});
 	};
