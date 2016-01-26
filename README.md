@@ -3,9 +3,45 @@ Pull Requests welcome, if you have used this script in a project let me know, i'
 forecast.io-javascript-api
 ==========================
 
-forecast.io Javascript API
+forecast.io JavaScript API
 
-For a how to, simply run index.html - php is required for proxy to work (cross domain policy workaround).
+## Getting Started
+PHP is required for proxy to work. This is a cross domain policy workaround.
+
+Forecast.io.js is configured to work with both [AMD](https://en.wikipedia.org/wiki/Asynchronous_module_definition) and [CJS](https://en.wikipedia.org/wiki/CommonJS) applications. When the module is loaded it will return a constructor that, once run, will provide the necessary interface functions, namely:
+
+* `getCurrentConditions`
+* `getForecastToday`
+* `getForecastWeek`
+
+Use of the above is demonstrated within index.html. 
+
+If you're using [Require.JS](http://requirejs.org/) use the example configuration in index.html as a reference. 
+
+If you're using [Webpack](http://webpack.github.io/), [Browserify](http://browserify.org/) or some other CJS module loader simply require the module like so
+
+`var ForecastIO = require('forecast.io');`
+
+and use the `ForecastIO` constructor as per the demo on the index page.
+
+## Location data
+
+Forecast.io.js can handle multiple location requests. Any request _must_ be supplied as an array of objects as per the example in index.html. 
+
+## Dependencies
+
+Forecast.io.js uses [moment.js](http://momentjs.com/) to handle date/time data and [jQuery](https://jquery.com/) to handle the requests via promises.
+
+If you're using Require.JS be sure to load include these two libraries somewhere in your application and load them via the module `define` function.
+
+If you're using a CJS module loader be sure to install these two libraries using npm:
+
+`npm install moment`
+Ref: https://www.npmjs.com/package/moment
+
+`npm install jquery`
+Re: https://www.npmjs.com/package/jquery
+
 
 ti.forecast.io-javascript-api
 =============================
