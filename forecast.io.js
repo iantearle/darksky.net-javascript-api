@@ -17,7 +17,8 @@
 		// Node. Does not work with strict CommonJS, but
 		// only CommonJS-like environments that support module.exports,
 		// like Node.
-		module.exports = (root.ForecastIO = factory(require('moment'), require('jquery'), require('es6-promise')));
+		module.exports = (root.ForecastIO = factory(require('moment'), require('jquery'), require('es6-promise').Promise));
+		//module.exports = (root.ForecastIO = factory(require('moment'), require('jquery'), require('es6-promise').polyfill()));
 	} else {
 		// Browser globals (root is window)
 		root.ForecastIO = factory(root.moment, root.$);
