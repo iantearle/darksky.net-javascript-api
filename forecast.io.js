@@ -10,20 +10,19 @@
 (function(root, factory) {
 	if (typeof define === 'function' && define.amd) {
 		// AMD. Register as an anonymous module.
-		define(['moment', 'jquery', 'es6-promise'], function(moment, $) {
-			return (root.ForecastIO = factory(moment, $));
+		define(['moment', 'es6-promise'], function(moment) {
+			return (root.ForecastIO = factory(moment));
 		});
 	} else if (typeof module === 'object' && module.exports) {
 		// Node. Does not work with strict CommonJS, but
 		// only CommonJS-like environments that support module.exports,
 		// like Node.
-		module.exports = (root.ForecastIO = factory(require('moment'), require('jquery'), require('es6-promise').Promise));
-		//module.exports = (root.ForecastIO = factory(require('moment'), require('jquery'), require('es6-promise').polyfill()));
+		module.exports = (root.ForecastIO = factory(require('moment'), require('es6-promise').Promise));
 	} else {
 		// Browser globals (root is window)
-		root.ForecastIO = factory(root.moment, root.$);
+		root.ForecastIO = factory(root.moment);
 	}
-}(this, function(moment, $) {
+}(this, function(moment) {
 
 	/* 	By Ian Tearle 
 		github.com/iantearle
