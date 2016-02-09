@@ -1,4 +1,4 @@
-Pull Requests welcome, if you have used this script in a project let me know, i'd like to start a directory. Have fun. 
+Pull Requests welcome, if you have used this script in a project let me know, I'd like to start a directory. Have fun. 
 
 forecast.io-javascript-api
 ==========================
@@ -30,17 +30,19 @@ Forecast.io.js can handle multiple location requests. Any request _must_ be supp
 
 ## Dependencies
 
-Forecast.io.js uses [moment.js](http://momentjs.com/) to handle date/time data and [jQuery](https://jquery.com/) to handle the requests via promises.
+Forecast.io.js uses [moment.js](http://momentjs.com/) to handle date/time data and an [ES6 Promises Polyfill](https://github.com/jakearchibald/es6-promise) to handle the requests via promises.
 
-If you're using Require.JS be sure to load include these two libraries somewhere in your application and load them via the module `define` function.
+If you're using Require.JS be sure to load include these two libraries somewhere in your application.
 
 If you're using a CJS module loader be sure to install these two libraries using npm:
 
 `npm install moment`
-Ref: https://www.npmjs.com/package/moment
 
-`npm install jquery`
-Re: https://www.npmjs.com/package/jquery
+Ref: [https://www.npmjs.com/package/moment](https://www.npmjs.com/package/moment)
+
+`npm install es6-promise`
+
+Ref: [https://www.npmjs.com/package/es6-promise](https://www.npmjs.com/package/es6-promise)
 
 
 ti.forecast.io-javascript-api
