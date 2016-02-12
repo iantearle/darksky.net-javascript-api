@@ -1,21 +1,28 @@
 'use strict';
 
-(function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['moment'], function(moment) {
-        	return (root.ForecastIO = factory(moment));
-        });
-    } else if (typeof module === 'object' && module.exports) {
-        // Node. Does not work with strict CommonJS, but
-        // only CommonJS-like environments that support module.exports,
-        // like Node.
-        module.exports = (root.ForecastIO = factory(require('moment')));
-    } else {
-        // Browser globals (root is window)
-        root.ForecastIO = factory(root.moment);
-  }
-}(this, function (moment) {
+//Install jQuery and Moment.js using npm or
+//if using require.js manage the paths as you see fit
+
+//Notes
+//Could use ES6 promises (and polyfill)
+//rather than jQuery
+
+(function(root, factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(['moment', 'es6-promise'], function(moment) {
+			return (root.ForecastIO = factory(moment));
+		});
+	} else if (typeof module === 'object' && module.exports) {
+		// Node. Does not work with strict CommonJS, but
+		// only CommonJS-like environments that support module.exports,
+		// like Node.
+		module.exports = (root.ForecastIO = factory(require('moment'), require('es6-promise').Promise));
+	} else {
+		// Browser globals (root is window)
+		root.ForecastIO = factory(root.moment);
+	}
+}(this, function(moment) {
 
 	/* 	By Ian Tearle
 		github.com/iantearle
@@ -28,23 +35,69 @@
 	*/
 
 	//Forecast Class
-
+	/**
+	 * Will construct a new ForecastIO object
+	 *
+	 * @param string $config
+	 * @return boolean
+	 */
 	function ForecastIO(config) {
 		//var PROXY_SCRIPT = '/proxy.php';
+<<<<<<< HEAD
 		if(!config) {
+=======
+		if (!config) {
+>>>>>>> a3a99f48d972882161c899c39275a7f8998d2ffa
 			console.log('You must pass ForecastIO configurations');
 		}
-		if(!config.PROXY_SCRIPT) {
-			if(!config.API_KEY) {
+		if (!config.PROXY_SCRIPT) {
+			if (!config.API_KEY) {
 				console.log('API_KEY or PROXY_SCRIPT must be set in ForecastIO config');
 			}
 		}
 		this.API_KEY = config.API_KEY;
+<<<<<<< HEAD
 		this.url = (typeof config.PROXY_SCRIPT !== 'undefined') ? config.PROXY_SCRIPT + '?url=': 'https://api.forecast.io/forecast/' + config.API_KEY + '/';
+=======
+		this.url = (typeof config.PROXY_SCRIPT !== 'undefined') ? config.PROXY_SCRIPT + '?url=' : 'https://api.forecast.io/forecast/' + config.API_KEY + '/';
+>>>>>>> a3a99f48d972882161c899c39275a7f8998d2ffa
 	}
 
+	function makeRequest(method, url) {
+		return new Promise(function(resolve, reject) {
+			var xhr = new XMLHttpRequest();
+			xhr.open(method, url);
+			xhr.onload = function() {
+				if (this.status >= 200 && this.status < 300) {
+					resolve(xhr.response);
+				} else {
+					reject({
+						status: this.status,
+						statusText: xhr.statusText
+					});
+				}
+			};
+			xhr.onerror = function() {
+				reject({
+					status: this.status,
+					statusText: xhr.statusText
+				});
+			};
+			xhr.send();
+		});
+	}
+
+	/**
+	 * Will build a url string from the lat long coords
+	 * and return a promise with the json
+	 *
+	 * @param number $latitude
+	 * @param number $longitude
+	 * @return promise object
+	 */
 	ForecastIO.prototype.requestData = function requestData(latitude, longitude) {
 		var requestUrl = this.url + latitude + ',' + longitude;
+<<<<<<< HEAD
 		var xhr = new XMLHttpRequest();
 		var content = null;
 		xhr.onreadystatechange = function() {
@@ -64,73 +117,108 @@
 		};
 		xhr.open('GET', requestUrl, false);
 		xhr.send();
+=======
 
-		if(content !== '' && (content)) {
-			return JSON.parse(content);
-		} else {
-			return false;
+		return makeRequest('GET', requestUrl);
+
+		// return $.ajax({
+		// 	url: requestUrl,
+		// 	error: function(data) {
+		// 		console.log('Error: Data not loaded: ', data);
+		// 	}
+		//});
+	};
+>>>>>>> a3a99f48d972882161c899c39275a7f8998d2ffa
+
+	ForecastIO.prototype.requestAllLocData = function requestAllLocData(locations) {
+		var locDataArr = [];
+		for (var i = 0; i < locations.length; i++) {
+			var content = this.requestData(locations[i].latitude, locations[i].longitude);
+			locDataArr.push(content);
 		}
+		return locDataArr;
 	};
 
 	/**
-	 * Will return the current conditions
+	 * Will take a locations object and a callback function
+	 * and pass the current conditions into the callback
 	 *
-	 * @param float $latitude
-	 * @param float $longitude
-	 * @return \ForecastIOConditions|boolean
+	 * @param object $locations
+	 * @param function $appFn
+	 * @return boolean
 	 */
-	ForecastIO.prototype.getCurrentConditions = function getCurrentConditions(latitude, longitude) {
-		var data = this.requestData(latitude, longitude);
-		if(data !== false) {
-			return new ForecastIOConditions(data.currently);
-		} else {
-			return false;
-		}
-	};
-
-	/**
-	 * Will return conditions on hourly basis for today
-	 *
-	 * @param type $latitude
-	 * @param type $longitude
-	 * @return \ForecastIOConditions|boolean
-	 */
-	ForecastIO.prototype.getForecastToday = function getForecastToday(latitude, longitude) {
-		var data = this.requestData(latitude, longitude);
-		if(data !== false) {
-			var conditions = [];
-			var today = moment().format('YYYY-MM-DD');
-			for(var i = 0; i < data.hourly.data.length; i++) {
-				var rawData = data.hourly.data[i];
-				if(moment.unix(rawData.time).format('YYYY-MM-DD') === today) {
-					conditions.push(new ForecastIOConditions(rawData));
+	ForecastIO.prototype.getCurrentConditions = function getCurrentConditions(locations, appFn) {
+		var allLocDataArr = this.requestAllLocData(locations);
+		Promise.all(allLocDataArr).then(function(values) {
+			var dataSets = [];
+			for (var i = 0; i < values.length; i++) {
+					var jsonData = JSON.parse(values[i]);
+					var currently = new ForecastIOConditions(jsonData.currently);
+					dataSets.push(currently);
 				}
-			}
-			return conditions;
-		} else {
-			return false;
-		}
+			appFn(dataSets);
+			return dataSets;
+		});
+		// .catch(function(reason) {
+		// 	console.log('error retrieving data', reason);
+		// });
 	};
 
 	/**
-	 * Will return daily conditions for next seven days
+	 * Will take a locations object and a callback function
+	 * and pass the conditions on hourly basis for today into the callback
 	 *
-	 * @param float $latitude
-	 * @param float $longitude
-	 * @return \ForecastIOConditions|boolean
+	 * @param object $locations
+	 * @param function $appFn
+	 * @return boolean
 	 */
-	ForecastIO.prototype.getForecastWeek = function getForecastWeek(latitude, longitude) {
-		var data = this.requestData(latitude, longitude);
-		if(data !== false) {
-			var conditions = [];
-			for(var i = 0; i < data.daily.data.length; i++) {
-				var rawData = data.daily.data[i];
-				conditions.push(new ForecastIOConditions(rawData));
-			}
-			return conditions;
-		} else {
-			return false;
-		}
+	ForecastIO.prototype.getForecastToday = function getForecastToday(locations, appFn) {
+		var allLocDataArr = this.requestAllLocData(locations);
+		Promise.all(allLocDataArr).then(function(values) {
+				var dataSets = [];
+				for (var i = 0; i < values.length; i++) {
+					var today = moment().format('YYYY-MM-DD');
+					var jsonData = JSON.parse(values[i]);
+					for (var j = 0; j < jsonData.hourly.data.length; j++) {
+						var hourlyData = jsonData.hourly.data[j];
+						if (moment.unix(hourlyData.time).format('YYYY-MM-DD') === today) {
+							dataSets.push(new ForecastIOConditions(hourlyData));
+						}
+					}
+				}
+				appFn(dataSets);
+				return dataSets;
+			});
+			// .catch(function(reason) {
+			// 	console.log('error retrieving data: ', reason);
+			// });
+	};
+
+	/**
+	 * Will take a locations object and a callback function
+	 * and pass the daily conditions for next seven days into the callback
+	 *
+	 * @param object $locations
+	 * @param function $appFn
+	 * @return boolean
+	 */
+	ForecastIO.prototype.getForecastWeek = function getForecastWeek(locations, appFn) {
+		var allLocDataArr = this.requestAllLocData(locations);
+		Promise.all(allLocDataArr).then(function(values) {
+				var dataSets = [];
+				for (var i = 0; i < values.length; i++) {
+					var jsonData = JSON.parse(values[i]);
+					for (var j = 0; j < jsonData.daily.data.length; j++) {
+						var dailyData = jsonData.daily.data[j];
+						dataSets.push(new ForecastIOConditions(dailyData));
+					}
+				}
+				appFn(dataSets);
+				return dataSets;
+			});
+			// .catch(function(reason) {
+			// 	console.log('error retrieving data: ', reason);
+			// });
 	};
 
 	function ForecastIOConditions(rawData) {
@@ -168,7 +256,11 @@
 		 * @return String
 		 */
 		this.getTime = function(format) {
+<<<<<<< HEAD
 			if(!format) {
+=======
+			if (!format) {
+>>>>>>> a3a99f48d972882161c899c39275a7f8998d2ffa
 				return rawData.time;
 			} else {
 				return moment.unix(rawData.time).format(format);
