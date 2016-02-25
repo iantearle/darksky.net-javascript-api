@@ -43,11 +43,7 @@
 	 */
 	function ForecastIO(config) {
 		//var PROXY_SCRIPT = '/proxy.php';
-<<<<<<< HEAD
-		if(!config) {
-=======
 		if (!config) {
->>>>>>> a3a99f48d972882161c899c39275a7f8998d2ffa
 			console.log('You must pass ForecastIO configurations');
 		}
 		if (!config.PROXY_SCRIPT) {
@@ -56,11 +52,7 @@
 			}
 		}
 		this.API_KEY = config.API_KEY;
-<<<<<<< HEAD
 		this.url = (typeof config.PROXY_SCRIPT !== 'undefined') ? config.PROXY_SCRIPT + '?url=': 'https://api.forecast.io/forecast/' + config.API_KEY + '/';
-=======
-		this.url = (typeof config.PROXY_SCRIPT !== 'undefined') ? config.PROXY_SCRIPT + '?url=' : 'https://api.forecast.io/forecast/' + config.API_KEY + '/';
->>>>>>> a3a99f48d972882161c899c39275a7f8998d2ffa
 	}
 
 	function makeRequest(method, url) {
@@ -97,38 +89,8 @@
 	 */
 	ForecastIO.prototype.requestData = function requestData(latitude, longitude) {
 		var requestUrl = this.url + latitude + ',' + longitude;
-<<<<<<< HEAD
-		var xhr = new XMLHttpRequest();
-		var content = null;
-		xhr.onreadystatechange = function() {
-			if(xhr.readyState < 4) {
-                return;
-            }
-            if(xhr.status !== 200) {
-                return;
-            }
-            if(xhr.readyState === 4) {
-		        content = xhr.responseText;
-            }
-	        else {
-				console.log('there was a problem getting the weather data. Status: ' + xhr.status + ' State: ' + xhr.readyState);
-				return false;
-	        }
-		};
-		xhr.open('GET', requestUrl, false);
-		xhr.send();
-=======
-
 		return makeRequest('GET', requestUrl);
-
-		// return $.ajax({
-		// 	url: requestUrl,
-		// 	error: function(data) {
-		// 		console.log('Error: Data not loaded: ', data);
-		// 	}
-		//});
 	};
->>>>>>> a3a99f48d972882161c899c39275a7f8998d2ffa
 
 	ForecastIO.prototype.requestAllLocData = function requestAllLocData(locations) {
 		var locDataArr = [];
@@ -256,11 +218,7 @@
 		 * @return String
 		 */
 		this.getTime = function(format) {
-<<<<<<< HEAD
-			if(!format) {
-=======
 			if (!format) {
->>>>>>> a3a99f48d972882161c899c39275a7f8998d2ffa
 				return rawData.time;
 			} else {
 				return moment.unix(rawData.time).format(format);
