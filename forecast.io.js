@@ -83,7 +83,7 @@
 	}
 
 	/**
-	 * Checks the location object 
+	 * Checks the location object
 	 * passed into the app
 	 * and wraps it in an array
 	 * if it wasn't one already
@@ -239,6 +239,14 @@
 		 */
 		this.getTemperature = function() {
 			return rawData.temperature;
+		};
+		/**
+		 * Will return the apparent temperature
+		 *
+		 * @return String
+		 */
+		this.getApparentTemperature = function() {
+			return rawData.apparentTemperature;
 		};
 		/**
 		 * Get the summary of the conditions
